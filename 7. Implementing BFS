@@ -1,0 +1,41 @@
+from collections import deque
+
+def bfs_with_cost(graph, start, goal):
+    queue = deque([(start, [], 0)])
+    visited = set()
+    
+    while queue:
+        node, path, cost = queue.popleft()
+        
+        if node == goal:
+            return path + [node], cost
+        
+        visited.add(node)
+        
+        for neighbor, edge_cost in graph[node]:
+            if neighbor not in visited:
+                queue.append((neighbor, path + [node], cost + edge_cost))
+                visited.add(neighbor)
+    
+    return None, float('inf')
+
+# Example usage
+graph = {
+    'A': [('B', 1), ('C', 2)],
+    'B': [('A', 1), ('D', 3), ('E', 2)],
+    'C': [('A', 2), ('F', 4)],
+    'D': [('B', 3)],
+    'E': [('B', 2), ('F', 1)],
+    'F': [('C', 4), ('E', 1)]
+}
+
+start = 'A'
+goal = 'F'
+
+path, cost = bfs_with_cost(graph, start, goal)
+
+if path:
+    print("Path found:", path)
+    print("Cost:", cost)
+else:
+    print("No path found.")
